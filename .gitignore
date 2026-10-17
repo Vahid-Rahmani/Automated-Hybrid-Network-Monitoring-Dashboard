@@ -22,3 +22,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local inventory / encrypted credentials must stay on the collector.
+monitor.local.json
+.pytest_cache/
+node_modules/
+test-results/

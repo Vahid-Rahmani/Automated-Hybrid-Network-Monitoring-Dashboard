@@ -1,0 +1,25 @@
+{
+  "domain": "example.test",
+  "domain_controller": "DC01.example.test",
+  "credential_file": "~/kurs-monitor-cred.xml",
+  "refresh_seconds": 30,
+  "max_workers": 4,
+  "timeout_seconds": 20,
+  "use_ssl": false,
+  "networks": [
+    {"prefix": "10.10.10.0/24", "site": "SITE-A"},
+    {"prefix": "10.10.20.0/24", "site": "SITE-A"},
+    {"prefix": "10.10.30.0/24", "site": "SITE-A"},
+    {"prefix": "10.20.40.0/24", "site": "SITE-B"},
+    {"prefix": "10.20.50.0/24", "site": "SITE-B"},
+    {"prefix": "10.20.60.0/24", "site": "SITE-B"}
+  ],
+  "devices": [
+    {"name": "STORAGE01", "hostname": "STORAGE01.example.test", "ip": "10.20.40.10", "type": "iSCSI Target Server", "services": ["WinTarget"]},
+    {"name": "FS-NODE1", "hostname": "FS-NODE1.example.test", "ip": "10.20.40.11", "type": "Cluster Node", "services": ["ClusSvc", "MSiSCSI", "LanmanServer"]},
+    {"name": "FS-NODE2", "hostname": "FS-NODE2.example.test", "ip": "10.20.40.12", "type": "Cluster Node", "services": ["ClusSvc", "MSiSCSI", "LanmanServer"]},
+    {"name": "Site 2 DC endpoint", "ip": "10.20.40.13", "kind": "tcp", "port": 389, "type": "LDAP endpoint"},
+    {"name": "FILE-CLUSTER", "hostname": "FILE-CLUSTER.example.test", "ip": "10.20.40.25", "kind": "tcp", "port": 135, "type": "Cluster RPC endpoint"},
+    {"name": "FILES", "hostname": "FILES.example.test", "ip": "10.20.40.20", "kind": "tcp", "port": 445, "type": "Clustered SMB endpoint"}
+  ]
+}
