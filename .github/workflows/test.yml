@@ -1,0 +1,57 @@
+name: Monitoring checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -m unittest discover -s tests -v
+      - run: python -m compileall -q app.py config.py collector.py monitor.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check static/dashboard.js
+  powershell:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse scripts with Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          $allErrors = @()
+          Get-ChildItem scripts -Filter *.ps1 | ForEach-Object {
+            $tokens = $null; $parseErrors = $null
+            $null = [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$tokens, [ref]$parseErrors)
+            $allErrors += $parseErrors
+          }
+          if ($allErrors.Count) { $allErrors | Format-List; exit 1 }
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r requirements.txt
+      - run: npm install --no-save --package-lock=false playwright@1.55.1
+      - run: npx playwright install --with-deps chromium --only-shell
+      - name: Browser smoke with isolated fixture responses
+        run: |
+          python -c "from app import create_app; import uvicorn; uvicorn.run(create_app(start_collector=False),host='127.0.0.1',port=8765)" > /tmp/monitor-api.log 2>&1 &
+          monitor_pid=$!
+          trap 'kill "$monitor_pid"' EXIT
+          node tests/browser-smoke.cjs

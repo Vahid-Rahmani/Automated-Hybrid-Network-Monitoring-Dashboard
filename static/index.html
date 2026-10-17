@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hybrid Lab Monitor</title>
+  <link rel="stylesheet" href="/static/dashboard.css">
+  <script src="/static/dashboard.js" defer></script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-title">Hybrid Lab<br>Infrastructure Monitor</div><div class="brand-domain" id="domain">Waiting for configuration</div></div>
+    <nav class="nav" aria-label="Sections"><a class="nav-item active" href="#overview">Overview</a><a class="nav-item" href="#devices">Devices & endpoints</a><a class="nav-item" href="#details">Services & cluster</a></nav>
+    <div class="sidebar-footer"><div class="mini-status"><div class="mini-row"><span>Collector</span><span id="collectorState">Waiting</span></div><div class="mini-row"><span>Cycle delay</span><span id="interval">—</span></div></div><p class="muted">Read-only Windows telemetry<br>Kerberos / PowerShell remoting</p></div>
+  </aside>
+  <main class="main" id="overview">
+    <header class="topbar"><div class="title"><h1>Hybrid Lab Monitor</h1><p>Hyper-V · EVE-NG · KVM · Windows Failover Cluster</p></div><div id="liveState" class="live">Waiting for first collection</div></header>
+    <div id="messages" class="notice" role="status" hidden></div>
+    <section class="cards" aria-label="Summary">
+      <div class="card accent-blue"><div class="card-label">Inventory</div><div class="card-value" id="total">—</div><div class="card-sub">Hosts + virtual service endpoints</div></div>
+      <div class="card accent-green"><div class="card-label">Telemetry collected</div><div class="card-value" id="monitored">—</div><div class="card-sub">Windows hosts queried</div></div>
+      <div class="card accent-blue"><div class="card-label">TCP reachable</div><div class="card-value" id="reachable">—</div><div class="card-sub">Port open; health checked separately</div></div>
+      <div class="card accent-red"><div class="card-label">Needs attention</div><div class="card-value" id="attention">—</div><div class="card-sub">Warnings, DNS or collection errors</div></div>
+      <div class="card accent-purple"><div class="card-label">Mapped sites</div><div class="card-value" id="sites">—</div><div class="card-sub">Derived from configured IPv4 subnets</div></div>
+    </section>
+    <section class="content-grid" aria-label="Current averages">
+      <div class="metric-panel"><div class="panel-title">Average CPU</div><div class="metric-big" id="cpu">—</div></div>
+      <div class="metric-panel"><div class="panel-title">Average RAM</div><div class="metric-big" id="ram">—</div></div>
+      <div class="metric-panel"><div class="panel-title">Average system disk usage</div><div class="metric-big" id="disk">—</div></div>
+    </section>
+    <section class="table-panel" id="devices">
+      <div class="table-header"><div class="table-title">Devices & service endpoints</div><div class="last-update" id="lastUpdate">No collection yet</div></div>
+      <div class="filters"><label>Site <select id="siteFilter"><option value="">All sites</option></select></label><label>Find device <input id="search" type="search" placeholder="Name, IP or role"></label><label><input id="issuesOnly" type="checkbox"> Needs attention only</label></div>
+      <div class="table-wrap"><table><thead><tr><th>Device / hostname</th><th>Site</th><th>Role</th><th>IPv4</th><th>Status</th><th>CPU</th><th>RAM</th><th>Disk</th><th>Uptime</th><th>Evidence / error</th></tr></thead><tbody id="deviceTable"><tr><td colspan="10">Waiting for first collection…</td></tr></tbody></table></div>
+    </section>
+    <section id="details"><h2>Services, volumes & cluster</h2><p class="muted">TCP reachability alone does not validate SMB permissions, quorum, AD replication or successful failover.</p><div id="hostDetails" class="detail-grid"></div></section>
+    <section class="info-card"><div class="info-title">Collection scope</div><div id="scope" class="info-value">Waiting…</div></section>
+  </main>
+</div>
+</body>
+</html>
