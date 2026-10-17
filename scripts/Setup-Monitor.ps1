@@ -37,7 +37,7 @@ $credentialPath = $config.credential_file
 if ($credentialPath.StartsWith('~/') -or $credentialPath.StartsWith('~\')) {
     $credentialPath = Join-Path $env:USERPROFILE $credentialPath.Substring(2)
 }
-$credential = Get-Credential -Message 'Enter the delegated monitoring account (user@example.test). Saved encrypted for this Windows user on this computer.'
+$credential = Get-Credential -Message "Enter the delegated monitoring account (user@$($config.domain)). Saved encrypted for this Windows user on this computer."
 if ($null -eq $credential) { throw 'No credential was supplied.' }
 $credential | Export-Clixml -LiteralPath $credentialPath
 Write-Host 'Local settings and encrypted credentials saved. Checking DC remoting...'
